@@ -232,7 +232,7 @@ packages:
       path: "packages/futurama_api"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.0.1"
   glob:
     dependency: transitive
     description:

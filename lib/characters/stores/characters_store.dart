@@ -5,6 +5,8 @@ part 'characters_store.g.dart';
 
 enum StoreStatus { initial, loading, success, failure }
 
+enum GenderFilter { all, male, female }
+
 // ignore: library_private_types_in_public_api
 class CharactersStore = _CharactersStore with _$CharactersStore;
 
@@ -28,9 +30,31 @@ abstract class _CharactersStore with Store {
   @observable
   String? errorMessage;
 
+  @observable
+  GenderFilter filter = GenderFilter.all;
+
+  @computed
+  ObservableList<Character> get maleCharacters =>
+      ObservableList.of(items.where((c) => c.gender == 'MALE'));
+
+  @computed
+  ObservableList<Character> get femaleCharacters =>
+      ObservableList.of(items.where((c) => c.gender == 'FEMALE'));
+
+  @computed
+  ObservableList<Character> get filteredCharacters {
+    switch (filter) {
+      case GenderFilter.male:
+        return maleCharacters;
+      case GenderFilter.female:
+        return femaleCharacters;
+      default:
+        return items;
+    }
+  }
+
   @action
   Future<void> fetch() async {
-    print('fetch page $page');
     if (hasReachedMax) return;
 
     try {
@@ -55,6 +79,10 @@ abstract class _CharactersStore with Store {
       status = StoreStatus.failure;
       errorMessage = e.toString();
     }
+  }
+
+  void setGenderFilter(GenderFilter newFilter) {
+    filter = newFilter;
   }
 
   void dispose() {

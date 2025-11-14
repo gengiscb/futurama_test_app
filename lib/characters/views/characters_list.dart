@@ -54,7 +54,7 @@ class _CharactersListState extends State<CharactersList> {
     return Observer(
       builder: (context) {
         final status = store.status;
-        final items = store.items;
+        final items = store.filteredCharacters;
         final showLoader = !store.hasReachedMax;
         if (status == StoreStatus.loading && items.isEmpty) {
           return const LoadingList();
@@ -65,6 +65,27 @@ class _CharactersListState extends State<CharactersList> {
         return CustomScrollView(
           controller: _scrollController,
           slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 12, 12, 4),
+                child: Wrap(
+                  children: GenderFilter.values
+                      .map(
+                        (e) => Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: ChoiceChip(
+                            label: Text(e.name),
+                            selected: store.filter == e,
+                            onSelected: (value) {
+                              store.setGenderFilter(e);
+                            },
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+            ),
             SliverPadding(
               padding: const EdgeInsets.all(16),
               sliver: SliverList.builder(

@@ -9,6 +9,15 @@ part of 'characters_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$CharactersStore on _CharactersStore, Store {
+  Computed<ObservableList<Character>>? _$filteredCharactersComputed;
+
+  @override
+  ObservableList<Character> get filteredCharacters =>
+      (_$filteredCharactersComputed ??= Computed<ObservableList<Character>>(
+        () => super.filteredCharacters,
+        name: '_CharactersStore.filteredCharacters',
+      )).value;
+
   late final _$itemsAtom = Atom(
     name: '_CharactersStore.items',
     context: context,
@@ -96,6 +105,24 @@ mixin _$CharactersStore on _CharactersStore, Store {
     });
   }
 
+  late final _$filterAtom = Atom(
+    name: '_CharactersStore.filter',
+    context: context,
+  );
+
+  @override
+  GenderFilter get filter {
+    _$filterAtom.reportRead();
+    return super.filter;
+  }
+
+  @override
+  set filter(GenderFilter value) {
+    _$filterAtom.reportWrite(value, super.filter, () {
+      super.filter = value;
+    });
+  }
+
   late final _$fetchAsyncAction = AsyncAction(
     '_CharactersStore.fetch',
     context: context,
@@ -113,7 +140,9 @@ items: ${items},
 page: ${page},
 hasReachedMax: ${hasReachedMax},
 status: ${status},
-errorMessage: ${errorMessage}
+errorMessage: ${errorMessage},
+filter: ${filter},
+filteredCharacters: ${filteredCharacters}
     ''';
   }
 }

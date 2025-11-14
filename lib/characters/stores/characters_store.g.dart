@@ -9,6 +9,22 @@ part of 'characters_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$CharactersStore on _CharactersStore, Store {
+  Computed<ObservableList<Character>>? _$maleCharactersComputed;
+
+  @override
+  ObservableList<Character> get maleCharacters =>
+      (_$maleCharactersComputed ??= Computed<ObservableList<Character>>(
+        () => super.maleCharacters,
+        name: '_CharactersStore.maleCharacters',
+      )).value;
+  Computed<ObservableList<Character>>? _$femaleCharactersComputed;
+
+  @override
+  ObservableList<Character> get femaleCharacters =>
+      (_$femaleCharactersComputed ??= Computed<ObservableList<Character>>(
+        () => super.femaleCharacters,
+        name: '_CharactersStore.femaleCharacters',
+      )).value;
   Computed<ObservableList<Character>>? _$filteredCharactersComputed;
 
   @override
@@ -133,6 +149,23 @@ mixin _$CharactersStore on _CharactersStore, Store {
     return _$fetchAsyncAction.run(() => super.fetch());
   }
 
+  late final _$_CharactersStoreActionController = ActionController(
+    name: '_CharactersStore',
+    context: context,
+  );
+
+  @override
+  void setGenderFilter(GenderFilter newFilter) {
+    final _$actionInfo = _$_CharactersStoreActionController.startAction(
+      name: '_CharactersStore.setGenderFilter',
+    );
+    try {
+      return super.setGenderFilter(newFilter);
+    } finally {
+      _$_CharactersStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
@@ -142,6 +175,8 @@ hasReachedMax: ${hasReachedMax},
 status: ${status},
 errorMessage: ${errorMessage},
 filter: ${filter},
+maleCharacters: ${maleCharacters},
+femaleCharacters: ${femaleCharacters},
 filteredCharacters: ${filteredCharacters}
     ''';
   }

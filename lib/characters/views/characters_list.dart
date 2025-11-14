@@ -67,7 +67,7 @@ class _CharactersListState extends State<CharactersList> {
           slivers: [
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 12, 12, 4),
+                padding: const EdgeInsets.all(16),
                 child: Wrap(
                   children: GenderFilter.values
                       .map(

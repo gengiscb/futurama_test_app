@@ -81,9 +81,8 @@ abstract class _CharactersStore with Store {
     }
   }
 
-  void setGenderFilter(GenderFilter newFilter) {
-    filter = newFilter;
-  }
+  @action
+  void setGenderFilter(GenderFilter newFilter) => filter = newFilter;
 
   void dispose() {
     _characterRepo.dispose();
